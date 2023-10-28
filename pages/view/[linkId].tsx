@@ -3,10 +3,32 @@ import DocumentView from "@/components/view/document-view";
 import { useLink } from "@/lib/swr/use-link";
 import NotFound from "@/pages/404";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function ViewPage() {
   const { link, error } = useLink();
   const { data: session, status } = useSession();
+  const [isArchived, setIsArchived] = useState(false);
+
+  const checkIfArchived = async () => {
+    const response = await fetch(`/api/links/${link?.id}/archive`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data?.isArchived) {
+        setIsArchived(true);
+      }
+    }
+  };
+
+  checkIfArchived();
+  if (isArchived) {
+    return <NotFound />;
+  }
 
   if (error && error.status === 404) {
     return <NotFound />;

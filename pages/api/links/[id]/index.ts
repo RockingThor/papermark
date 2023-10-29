@@ -24,6 +24,7 @@ export default async function handle(
           emailProtected: true,
           allowDownload: true,
           password: true,
+          isArchived: true,
           document: { select: { id: true, name: true } },
         },
       });

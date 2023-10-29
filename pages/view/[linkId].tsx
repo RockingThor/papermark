@@ -11,7 +11,7 @@ export default function ViewPage() {
   const [isArchived, setIsArchived] = useState(false);
 
   const checkIfArchived = async () => {
-    const response = await fetch(`/api/links/${link?.id}/archive`, {
+    const response = await fetch(`/api/links/${link?.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -25,11 +25,6 @@ export default function ViewPage() {
     }
   };
 
-  checkIfArchived();
-  if (isArchived) {
-    return <NotFound />;
-  }
-
   if (error && error.status === 404) {
     return <NotFound />;
   }
@@ -40,6 +35,11 @@ export default function ViewPage() {
         <LoadingSpinner className="h-20 w-20" />
       </div>
     );
+  }
+
+  checkIfArchived();
+  if (isArchived) {
+    return <NotFound />;
   }
 
   const { expiresAt, emailProtected, password: linkPassword } = link;

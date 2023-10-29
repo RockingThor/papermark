@@ -3,14 +3,15 @@ import DocumentView from "@/components/view/document-view";
 import { useLink } from "@/lib/swr/use-link";
 import NotFound from "@/pages/404";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 
 export default function ViewPage() {
   const { link, error } = useLink();
   const { data: session, status } = useSession();
 
   if (error && error.status === 404) {
-    return <NotFound />;
+    return (
+      <NotFound message="Sorry, we couldn’t find the page you’re looking for." />
+    );
   }
 
   if (!link || status === "loading") {
@@ -31,8 +32,16 @@ export default function ViewPage() {
   const { email: userEmail } = session?.user || {};
 
   // If the link is expired, show a 404 page
-  if ((expiresAt && new Date(expiresAt) < new Date()) || isArchived) {
-    return <NotFound />;
+  if (expiresAt && new Date(expiresAt) < new Date()) {
+    return (
+      <NotFound message="Sorry, the link you're looking for is expired." />
+    );
+  }
+
+  if (isArchived) {
+    return (
+      <NotFound message="Sorry, the file you're looking for is archived." />
+    );
   }
 
   if (emailProtected || linkPassword) {

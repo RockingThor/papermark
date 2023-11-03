@@ -9,9 +9,7 @@ export default function ViewPage() {
   const { data: session, status } = useSession();
 
   if (error && error.status === 404) {
-    return (
-      <NotFound message="Sorry, we couldn’t find the page you’re looking for." />
-    );
+    return <NotFound />;
   }
 
   if (!link || status === "loading") {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function NotFound({ message }: { message: string }) {
+export default function NotFound({ message }: { message?: string }) {
   return (
     <>
       <div className="min-h-screen pt-16 pb-12 flex flex-col">
@@ -13,7 +13,11 @@ export default function NotFound({ message }: { message: string }) {
               <h1 className="mt-2 text-4xl font-extrabold text-gray-100 tracking-tight sm:text-5xl">
                 Page not found.
               </h1>
-              <p className="mt-2 text-base text-gray-600">{message}</p>
+              <p className="mt-2 text-base text-gray-600">
+                {message
+                  ? message
+                  : `Sorry, we couldn’t find the page you’re looking for.`}
+              </p>
               <div className="mt-6">
                 <Link
                   href="/"
